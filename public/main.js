@@ -34,5 +34,9 @@ async function getLocation() {
 }
 
 async function vibrate(d=1000) {
-    exec("termux-vibrate -d "+d);
+    return await exec("termux-vibrate -d "+d);
+}
+
+async function notify(title, content) {
+    return await exec(`termux-notification -t "${title}" -c "${content}"`);
 }

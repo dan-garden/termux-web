@@ -37,7 +37,11 @@ app.get("/get-output", (req, res) => {
     res.json({
         result
     })
-})
+});
+
+app.get("/get-outputs", (req, res) => {
+    res.json(outputs);
+});
 
 
 
