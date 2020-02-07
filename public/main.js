@@ -25,8 +25,12 @@ async function getOutput(id) {
 
 async function getBattery() {
     const req = await exec("termux-battery-status");
-    const res = JSON.parse(req.result.output);
-    return res;
+    return req.result.output;
+}
+
+async function getLocation() {
+    const req = await exec("termux-location");
+    return req.result.output;
 }
 
 async function vibrate(d=1000) {

@@ -29,7 +29,7 @@ app.get("/get-output", (req, res) => {
     })[0] || false;
 
     if(result) {
-        if(result.input && result.input.startsWith("termux")) {
+        if(result.input && result.input.startsWith("termux") && result.output && (result.output.trim().startsWith("{") || result.output.trim().startsWith("["))) {
             result.output = JSON.parse(result.output);
         }
     }
