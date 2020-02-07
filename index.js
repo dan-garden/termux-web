@@ -13,13 +13,25 @@ app.use(bodyParser.urlencoded({
 }));
 
 let commands = [];
+let outputs = [];
 
 app.post("/set-output", (req, res) => {
-    console.log(req.body);
+    outputs.push(req.body);
     res.json({
-        status: true
+        status: true,
+        ...req.body
     });
 });
+
+app.get("/get-output", (req, res) => {
+    const output = outputs.filter(command => {
+        return command.id === req.query.id;
+    })[0] || false;
+
+    res.json({
+        result: output
+    })
+})
 
 
 
@@ -28,7 +40,8 @@ app.get("/exec", (req, res) => {
     const input = req.query.input;
     commands.push({id: id, input: input});
     res.json({
-        status: true
+        status: true,
+        id
     })
 });
 
