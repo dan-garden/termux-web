@@ -24,12 +24,18 @@ app.post("/set-output", (req, res) => {
 });
 
 app.get("/get-output", (req, res) => {
-    const output = outputs.filter(command => {
+    const result = outputs.filter(command => {
         return command.id === req.query.id;
     })[0] || false;
 
+    if(result) {
+        if(result.input && result.input.startsWith("termux")) {
+            result.output = JSON.parse(result.output);
+        }
+    }
+
     res.json({
-        result: output
+        result
     })
 })
 

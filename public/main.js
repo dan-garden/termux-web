@@ -11,9 +11,7 @@ async function exec(cmd) {
             }
         }, 1000);
     })
-
-    console.log(output);
-    return res;
+    return output;
 }
 
 
@@ -22,4 +20,15 @@ async function getOutput(id) {
     const res = await req.json();
 
     return res;
+}
+
+
+async function getBattery() {
+    const req = await exec("termux-battery-status");
+    const res = JSON.parse(req.result.output);
+    return res;
+}
+
+async function vibrate(d=1000) {
+    exec("termux-vibrate -d "+d);
 }
