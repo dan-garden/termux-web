@@ -5,7 +5,7 @@ async function exec(cmd) {
     const output = await new Promise((resolve, reject) => {
         const check = setInterval(async () => {
             const o = await getOutput(res.id);
-            if(o) {
+            if(o && o.result) {
                 clearInterval(check);
                 resolve(o);
             }
