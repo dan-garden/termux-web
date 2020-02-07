@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const bodyParser = require('body-parser');
 const app = express();
@@ -38,4 +40,6 @@ app.get("/commands", (req, res) => {
 });
 
 
-app.listen(3000, console.log("app listening on port 3000"));
+
+app.use('/', express.static(__dirname + '/public'))
+app.listen(process.env.PORT, console.log("Server stared on port " + process.env.PORT));
