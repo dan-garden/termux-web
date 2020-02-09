@@ -77,6 +77,7 @@ function showOutput(request) {
             result.output = JSON.stringify(result.output, null, 4) + "\n";
         }
     
+        output.textContent += "> " + result.input + "\n";
         output.textContent += result.output;
         output.textContent += result.error;
         output.scrollTop = output.scrollHeight;
