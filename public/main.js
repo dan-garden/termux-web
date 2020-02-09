@@ -78,6 +78,7 @@ function showOutput(request) {
         }
     
         output.textContent += result.output;
+        output.textContent += result.error;
         output.scrollTop = output.scrollHeight;
     }
 }
