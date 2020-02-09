@@ -13,12 +13,13 @@
     display: inline-block;
     position: fixed;
     top: 0;
+    overflow-y: scroll;
+    padding: 5px;
 }
 
 #input {
     left: 0;
     z-index: 10;
-    padding: 5px;
 }
 
 #output {
@@ -26,7 +27,6 @@
     z-index: 9;
     background-color: black;
     color: limegreen;
-    padding: 5px;
     font-family: 'VT323', monospace;
 }
 

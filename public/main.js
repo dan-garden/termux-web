@@ -36,6 +36,13 @@ async function getOutput(id) {
     return res;
 }
 
+async function getOutputs() {
+    const req = await fetch(url + "/get-outputs");
+    const res = await req.json();
+
+    return res;
+}
+
 async function getBattery() {
     return await exec("termux-battery-status");
 }
@@ -57,20 +64,31 @@ async function setSpeed(val) {
 }
 
 
+
+
 function showOutput(request) {
     const output = document.querySelector("#output");
-    const result = request.result;
-    if(typeof result.output === "object") {
-        result.output = "\n" + JSON.stringify(result.output, null, 4);
-    }
+    const result = request.result || request;
 
-    output.textContent += result.output;
-    output.scrollTop = output.scrollHeight;
+    if(result.input === "clear" || result.input === "cls") {
+        output.innerHTML = "";
+    } else {
+        if(typeof result.output === "object") {
+            result.output = "\n" + JSON.stringify(result.output, null, 4);
+        }
+    
+        output.textContent += result.output;
+        output.scrollTop = output.scrollHeight;
+    }
 }
 
 
 
 (() => {
+
+    getOutputs().then(outputs => {
+        outputs.forEach(showOutput);
+    })
 
     document.querySelectorAll(".widget").forEach(widget => {
         widget.addEventListener("submit", async e => {
