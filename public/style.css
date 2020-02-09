@@ -40,7 +40,8 @@
 }
 
 .widget h4 {
-
+    font-family: Verdana;
+    color: grey;
 }
 
 .widget input {
