@@ -74,7 +74,7 @@ function showOutput(request) {
         output.innerHTML = "";
     } else {
         if(typeof result.output === "object") {
-            result.output = "\n" + JSON.stringify(result.output, null, 4);
+            result.output = JSON.stringify(result.output, null, 4) + "\n";
         }
     
         output.textContent += result.output;
