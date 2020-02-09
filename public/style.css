@@ -3,3 +3,53 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+
+
+.panel {
+    width: 50vw;
+    height: 100vh;
+    border: solid 1px grey;
+    display: inline-block;
+    position: fixed;
+    top: 0;
+}
+
+#input {
+    left: 0;
+    z-index: 10;
+    padding: 5px;
+}
+
+#output {
+    right: 0;
+    z-index: 9;
+    background-color: black;
+    color: limegreen;
+    padding: 5px;
+    font-family: 'VT323', monospace;
+}
+
+.widget {
+    background: white;
+    display: block;
+    padding: 5px;
+    margin: 15px 0;
+    width: 100%;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.widget h4 {
+
+}
+
+.widget input {
+    padding: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.widget button {
+    padding: 5px;
+    font-size: 14px;
+}
