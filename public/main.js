@@ -59,11 +59,15 @@ async function vibrate(d = 1000) {
 }
 
 async function notify(title, content) {
-    return await exec(`termux-notification -t "${title}" -c "${content}"`);
+    return await exec(`termux-notification -t "${title}" -c "${content}"  --led-on 1000`);
 }
 
 async function setSpeed(val) {
     return await exec(`setspeed ` + val);
+}
+
+async function getContacts() {
+    return await exec(`termux-contact-list`);
 }
 
 
@@ -123,7 +127,6 @@ const commands = {
             }
         }
     },
-
     command: {
         fn: exec,
         title: "Command Input",
@@ -133,17 +136,14 @@ const commands = {
             }
         }
     },
-
     battery: {
         fn: getBattery,
         title: "Get Battery"
     },
-
     location: {
         fn: getLocation,
         title: "Get Location"
     },
-
     vibrate: {
         fn: vibrate,
         title: "Vibrate",
@@ -154,12 +154,10 @@ const commands = {
             }
         }
     },
-
     torch: {
         fn: torch,
         title: "Torch"
     },
-
     notify: {
         fn: notify,
         title: "Notify",
@@ -172,7 +170,10 @@ const commands = {
             }
         }
     },
-
+    contacts: {
+        fn: getContacts,
+        title: "Get Contacts"
+    }
 
 }
 
