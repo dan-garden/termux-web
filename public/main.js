@@ -67,6 +67,14 @@ async function setSpeed(val) {
 }
 
 
+let torchState = 'off';
+async function torch() {
+    torchState = torchState === 'on' ? 'off' : 'on';
+
+    return await exec(`termux-torch ${torchState}`);
+}
+
+
 
 
 function showOutput(request) {
@@ -145,6 +153,11 @@ const commands = {
                 placeholder: "Milliseconds..."
             }
         }
+    },
+
+    torch: {
+        fn: torch,
+        title: "Torch"
     },
 
     notify: {
