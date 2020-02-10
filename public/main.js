@@ -1,9 +1,12 @@
 const url = "https://termux-web.herokuapp.com";
 const maxCount = 100;
 const speed = 1000;
-
+const output = document.querySelector("#output");
 
 async function exec(cmd) {
+    showOutput({
+        input: cmd
+    })
     const req = await fetch(url + "/exec?input=" + encodeURIComponent(cmd));
     const res = await req.json();
     let count = 0;
@@ -60,66 +63,160 @@ async function notify(title, content) {
 }
 
 async function setSpeed(val) {
-    return await exec(`setspeed `+val);
+    return await exec(`setspeed ` + val);
 }
 
 
 
 
 function showOutput(request) {
-    const output = document.querySelector("#output");
     const result = request.result || request;
 
-    if(result.input === "clear" || result.input === "cls") {
+    if (result.input === "clear" || result.input === "cls") {
         output.innerHTML = "";
     } else {
-        if(typeof result.output === "object") {
+        if (typeof result.output === "object") {
             result.output = JSON.stringify(result.output, null, 4) + "\n";
         }
-    
-        output.textContent += "> " + result.input + "\n";
-        output.textContent += result.output;
-        output.textContent += result.error;
+
+        output.innerHTML += `<span class="output-input">${result.input || ""}</span> \n`;
+        output.innerHTML += `<span class="output-output">${result.output || ""}</span>`;
+        output.innerHTML += `<span class="output-error">${result.error || ""}</span>`;
         output.scrollTop = output.scrollHeight;
     }
 }
 
-
-
-(() => {
-
+function loadOutput() {
     getOutputs().then(outputs => {
+        output.innerHTML = ``;
         outputs.forEach(showOutput);
-    })
+    });
+}
 
-    document.querySelectorAll(".widget").forEach(widget => {
-        widget.addEventListener("submit", async e => {
-            e.preventDefault();
 
-            const data = new FormData(widget);
-            const type = widget.getAttribute("data-type");
-
-            if(type === "speed") {
-                const speed = data.get("speed");
-                setSpeed(speed).then(showOutput);
-            } else if(type === "command") {
-                const command = data.get("command");
-                exec(command).then(showOutput);
-            } else if(type === "battery") {
-                getBattery().then(showOutput);
-            } else if(type === "location") {
-                getLocation().then(showOutput);
-            } else if(type === "vibrate") {
-                const millis = data.get("millis");
-                vibrate(millis).then(showOutput);
-            } else if(type === "notify") {
-                const title = data.get("title");
-                const content = data.get("content");
-                notify(title, content).then(showOutput);
+const commands = {
+    clear: {
+        fn: exec,
+        title: "Clear Output",
+        inputs: {
+            cmd: {
+                type: "hidden",
+                value: "clear",
             }
+        }
+    },
+    speed: {
+        fn: setSpeed,
+        title: "Set Speed",
+        inputs: {
+            speed: {
+                type: "number",
+                placeholder: "Milliseconds..."
+            }
+        }
+    },
 
-            widget.reset();
-        })
-    })
+    command: {
+        fn: exec,
+        title: "Command Input",
+        inputs: {
+            command: {
+                placeholder: "Command..."
+            }
+        }
+    },
 
-})()
+    battery: {
+        fn: getBattery,
+        title: "Get Battery"
+    },
+
+    location: {
+        fn: getLocation,
+        title: "Get Location"
+    },
+
+    vibrate: {
+        fn: vibrate,
+        title: "Vibrate",
+        inputs: {
+            millis: {
+                type: "number",
+                placeholder: "Milliseconds..."
+            }
+        }
+    },
+
+    notify: {
+        fn: notify,
+        title: "Notify",
+        inputs: {
+            title: {
+                placeholder: "Title..."
+            },
+            content: {
+                placeholder: "Content..."
+            }
+        }
+    },
+
+
+}
+
+
+loadOutput();
+
+
+const input = document.querySelector("#input");
+const commandTypes = Object.keys(commands);
+
+commandTypes.forEach(commandType => {
+    const command = commands[commandType];
+    const inputs = command.inputs || [];
+    const inputTypes = Object.keys(inputs);
+
+    const widget = document.createElement("form");
+    widget.classList.add("widget");
+    widget.setAttribute("data-type", commandType);
+    widget.innerHTML = `
+    <h4>${command.title}</h4>
+    ${inputTypes.map(inputType => {
+        const input = inputs[inputType];
+        // return `<input value="${input.value || ''}" type="${input.type || 'text'}" placeholder="${input.placeholder || ''}" name="${inputType}"/>`;
+    }).join("\n")}
+    <button type="submit">Submit</button>
+    `;
+
+    input.append(widget);
+
+    widget.addEventListener("submit", async e => {
+        e.preventDefault();
+        const data = new FormData(widget);
+        // const values = inputTypes.map(inputType => data.get(inputType));
+        let includesNull = false;
+        const values = inputTypes.map(inputType => {
+            const input = inputs[inputType];
+            if (!includesNull) {
+                let val;
+                if (input.type === "hidden") {
+                    val = input.value;
+                } else {
+                    val = prompt("Enter " + input.placeholder || inputType, input.value);
+                }
+
+                if (!val) {
+                    includesNull = true;
+                }
+                return val;
+            } else {
+                return null;
+            }
+        });
+
+        if (!values.includes(null)) {
+            command.fn(...values).then(loadOutput);
+        }
+        widget.reset();
+    });
+
+});
