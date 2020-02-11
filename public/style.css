@@ -75,6 +75,7 @@
     color: white;
 }
 
-.output-error {
-    color: red;
+#output a {
+    color: inherit;
+    font-weight: bold;
 }

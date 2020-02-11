@@ -78,9 +78,16 @@ async function torch() {
     return await exec(`termux-torch ${torchState}`);
 }
 
+async function uploadFile(filename) {
+    return await exec(`curl -s -F "file=@${filename}" https://dan-garden.com/api/post-image.php`);
+}
+
 async function takePhoto(id="1", open="0") {
     const filename = "photos/" + id + "_" + Date.now()+".jpeg";
-    return await exec(`termux-camera-photo -c ${id} ${filename}${open ==="1" ? ` && termux-open ${filename}` : ` && curl -s -F "file=@${filename}" https://dan-garden.com/api/post-image.php`}`);
+    const res = await exec(`termux-camera-photo -c ${id} ${filename}${open ==="1" ? ` && termux-open ${filename}` : ''} && echo "Photo taken using id:${id}"`);
+    loadOutput();
+    const upload = await uploadFile(filename);
+    return res;
 }
 
 async function makeDirectory(name) {
@@ -98,9 +105,9 @@ function showOutput(request) {
             result.output = JSON.stringify(result.output, null, 4) + "\n";
         }
 
-        output.innerHTML += `<span class="output-input">${result.input || ""}</span> \n`;
-        output.innerHTML += `<span class="output-output">${result.output || ""}</span>`;
-        output.innerHTML += `<span class="output-error">${result.error || ""}</span>`;
+        output.innerHTML += `<span class="output-input">${result.input ? anchorme(result.input) : ""}</span> \n`;
+        output.innerHTML += `<span class="output-output">${result.output ? anchorme(result.output) : ""}</span>`;
+        output.innerHTML += `<span class="output-error">${result.error ? anchorme(result.error) : ""}</span>`;
         output.scrollTop = output.scrollHeight;
     }
 }
