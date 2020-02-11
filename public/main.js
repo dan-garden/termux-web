@@ -78,7 +78,14 @@ async function torch() {
     return await exec(`termux-torch ${torchState}`);
 }
 
+async function takePhoto(id="1", open="0") {
+    const filename = "photos/" + id + "_" + Date.now()+".jpeg";
+    return await exec(`termux-camera-photo -c ${id} ${filename}${open ==="1" ? ` && termux-open ${filename}` : ""}`);
+}
 
+async function makeDirectory(name) {
+    return await exec(`mkdir ${name}`);
+}
 
 
 function showOutput(request) {
@@ -107,6 +114,15 @@ function loadOutput() {
 
 
 const commands = {
+    command: {
+        fn: exec,
+        title: "Command Input",
+        inputs: {
+            command: {
+                placeholder: "Command..."
+            }
+        }
+    },
     clear: {
         fn: exec,
         title: "Clear Output",
@@ -117,6 +133,25 @@ const commands = {
             }
         }
     },
+    ls: {
+        fn: exec,
+        title: "List Files",
+        inputs: {
+            cmd: {
+                type: "hidden",
+                value: "ls"
+            }
+        }
+    },
+    mkdir: {
+        fn: makeDirectory,
+        title: "Make Directory",
+        inputs: {
+            name: {
+                placeholder: "Directory Name"
+            }
+        }
+    },
     speed: {
         fn: setSpeed,
         title: "Set Speed",
@@ -124,15 +159,6 @@ const commands = {
             speed: {
                 type: "number",
                 placeholder: "Milliseconds..."
-            }
-        }
-    },
-    command: {
-        fn: exec,
-        title: "Command Input",
-        inputs: {
-            command: {
-                placeholder: "Command..."
             }
         }
     },
@@ -173,6 +199,32 @@ const commands = {
     contacts: {
         fn: getContacts,
         title: "Get Contacts"
+    },
+
+    front_photo: {
+        fn: takePhoto,
+        title: "Front Photo",
+        inputs: {
+            id: {
+                type: "hidden",
+                value: "1"
+            },
+            open: {
+                placeholder: "open value.  0 = false | 1 = true",
+                value: "0"
+            }
+        }
+    },
+
+    back_photo: {
+        fn: takePhoto,
+        title: "Back Photo",
+        inputs: {
+            id: {
+                type: "hidden",
+                value: "0"
+            }
+        }
     }
 
 }
@@ -193,12 +245,11 @@ commandTypes.forEach(commandType => {
     widget.classList.add("widget");
     widget.setAttribute("data-type", commandType);
     widget.innerHTML = `
-    <h4>${command.title}</h4>
     ${inputTypes.map(inputType => {
         const input = inputs[inputType];
         // return `<input value="${input.value || ''}" type="${input.type || 'text'}" placeholder="${input.placeholder || ''}" name="${inputType}"/>`;
     }).join("\n")}
-    <button type="submit">Submit</button>
+    <button type="submit">${command.title}</button>
     `;
 
     input.append(widget);

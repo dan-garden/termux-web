@@ -7,7 +7,6 @@
 
 
 .panel {
-    width: 50vw;
     height: 100vh;
     border: solid 1px grey;
     display: inline-block;
@@ -20,6 +19,8 @@
 #input {
     left: 0;
     z-index: 10;
+    width: 25vw;
+    text-align: center;
 }
 
 #output {
@@ -27,13 +28,13 @@
     z-index: 9;
     background-color: black;
     font-size: 14px;
+    width: 75vw;
 }
 
 .widget {
     background: white;
     display: inline-block;
     vertical-align: top;
-    margin: 15px 0;
     width: 150px;
     position: relative;
     /* box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); */
