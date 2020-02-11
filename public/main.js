@@ -210,6 +210,7 @@ const commands = {
                 value: "1"
             },
             open: {
+                type: "hidden",
                 placeholder: "open value.  0 = false | 1 = true",
                 value: "0"
             }
@@ -222,6 +223,7 @@ const commands = {
         inputs: {
             id: {
                 type: "hidden",
+                placeholder: "open value.  0 = false | 1 = true",
                 value: "0"
             }
         }
