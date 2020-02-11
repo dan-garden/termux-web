@@ -223,6 +223,10 @@ const commands = {
         inputs: {
             id: {
                 type: "hidden",
+                value: "0"
+            },
+            open: {
+                type: "hidden",
                 placeholder: "open value.  0 = false | 1 = true",
                 value: "0"
             }
