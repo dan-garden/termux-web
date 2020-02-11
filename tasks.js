@@ -28,7 +28,7 @@ class Tasks {
             const req = await fetch("https://bin-days.herokuapp.com/dates?address=63%20burrendong%20road%20coombabah");
             const json = await req.json();
             const result = json.result;
-            const timeframe = "withinWeek";
+            const timeframe = "withinDay";
 
 
             const binTypes = Object.keys(result[timeframe]);
