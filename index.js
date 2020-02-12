@@ -27,17 +27,21 @@ app.post("/set-output", (req, res) => {
 app.get("/get-output", (req, res) => {
     let results = outputs.filter(command => {
         return command.id === req.query.id;
-    });
+    })[0] || false;
 
-    results = results.map(line => {
-        if(line) {
-            if(line.input && line.output && (line.output.trim().startsWith("{") || line.output.trim().startsWith("["))) {
-                line.output = JSON.parse(line.output);
-            }
-        }
+    // results = results.map(line => {
+    //     if(line) {
+    //         if(line.input && line.output && (line.output.trim().startsWith("{") || line.output.trim().startsWith("["))) {
+    //             line.output = JSON.parse(line.output);
+    //         }
+    //     }
     
-        return line;
-    })
+    //     return line;
+    // })
+
+    // res.json({
+    //     results
+    // })
 
     res.json({
         results
