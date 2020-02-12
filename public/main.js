@@ -20,7 +20,7 @@ async function exec(cmd) {
                 });
             } else {
                 const o = await getOutput(res.id);
-                if (o && o.results && o.results.length) {
+                if (o && o.results) {
                     clearInterval(check);
                     resolve(o);
                 } else {
