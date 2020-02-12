@@ -75,7 +75,19 @@
     color: white;
 }
 
+.output-error {
+    color: red;
+}
+
 #output a {
     color: inherit;
     font-weight: bold;
+}
+
+#reload {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    padding: 5px;
 }

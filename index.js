@@ -25,18 +25,22 @@ app.post("/set-output", (req, res) => {
 });
 
 app.get("/get-output", (req, res) => {
-    const result = outputs.filter(command => {
+    let results = outputs.filter(command => {
         return command.id === req.query.id;
-    })[0] || false;
+    });
 
-    if(result) {
-        if(result.input && result.input.startsWith("termux") && result.output && (result.output.trim().startsWith("{") || result.output.trim().startsWith("["))) {
-            result.output = JSON.parse(result.output);
+    results = results.map(line => {
+        if(line) {
+            if(line.input && line.output && (line.output.trim().startsWith("{") || line.output.trim().startsWith("["))) {
+                line.output = JSON.parse(line.output);
+            }
         }
-    }
+    
+        return line;
+    })
 
     res.json({
-        result
+        results
     })
 });
 

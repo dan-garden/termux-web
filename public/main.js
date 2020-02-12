@@ -1,4 +1,5 @@
 const url = "https://termux-web.herokuapp.com";
+// const url = "http://localhost:5000";
 const maxCount = 100;
 const speed = 1000;
 const output = document.querySelector("#output");
@@ -19,7 +20,7 @@ async function exec(cmd) {
                 });
             } else {
                 const o = await getOutput(res.id);
-                if (o && o.result) {
+                if (o && o.results) {
                     clearInterval(check);
                     resolve(o);
                 } else {
@@ -79,14 +80,14 @@ async function torch() {
 }
 
 async function uploadFile(filename) {
-    return await exec(`curl -s -F "file=@${filename}" https://dan-garden.com/api/post-image.php`);
+    const input = `curl -s -F "file=@${filename}" https://dan-garden.com/api/post-image.php`;
+    return await exec(input).then(() => loadOutput());
 }
 
 async function takePhoto(id="1", open="0") {
     const filename = "photos/" + id + "_" + Date.now()+".jpeg";
     const res = await exec(`termux-camera-photo -c ${id} ${filename}${open ==="1" ? ` && termux-open ${filename}` : ''} && echo "Photo taken using id:${id}"`);
-    loadOutput();
-    const upload = await uploadFile(filename);
+    uploadFile(filename);
     return res;
 }
 
@@ -105,9 +106,16 @@ function showOutput(request) {
             result.output = JSON.stringify(result.output, null, 4) + "\n";
         }
 
-        output.innerHTML += `<span class="output-input">${result.input ? anchorme(result.input) : ""}</span> \n`;
-        output.innerHTML += `<span class="output-output">${result.output ? anchorme(result.output) : ""}</span>`;
-        output.innerHTML += `<span class="output-error">${result.error ? anchorme(result.error) : ""}</span>`;
+        const aopts = {
+            attributes: [{
+                name: "target",
+                value: "_blank"
+            }]
+        };
+
+        output.innerHTML += `<span class="output-input">${result.input ? anchorme(result.input, aopts) : ""}</span> \n`;
+        output.innerHTML += `<span class="output-output">${result.output ? anchorme(result.output, aopts) : ""}</span>`;
+        output.innerHTML += `<span class="output-error">${result.error ? anchorme(result.error, aopts) : ""}</span>`;
         output.scrollTop = output.scrollHeight;
     }
 }
@@ -298,3 +306,11 @@ commandTypes.forEach(commandType => {
     });
 
 });
+
+
+
+document.querySelector("#reload").addEventListener("click", e => {
+    e.preventDefault();
+
+    loadOutput();
+})
