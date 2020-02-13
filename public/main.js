@@ -97,6 +97,9 @@ async function makeDirectory(name) {
     return await exec(`mkdir ${name}`);
 }
 
+async function share(string) {
+    return await exec(`termux-clipboard-set ${string} && echo ${string}`);
+}
 
 function showOutput(request) {
     const result = request.result || request;
@@ -223,6 +226,18 @@ const commands = {
             }
         }
     },
+
+    share: {
+        fn: share,
+        title: "Share",
+        icon: "share",
+        inputs: {
+            string: {
+                placeholder: "String..."
+            }
+        }
+    },
+
     contacts: {
         fn: getContacts,
         title: "Get Contacts",
