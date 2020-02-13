@@ -2,6 +2,8 @@ const url = "https://termux-web.herokuapp.com";
 // const url = "http://localhost:5000";
 const maxCount = 100;
 const speed = 1000;
+
+const input = document.querySelector("#input");
 const output = document.querySelector("#output");
 
 async function exec(cmd) {
@@ -129,6 +131,17 @@ function loadOutput() {
 
 
 const commands = {
+    speed: {
+        fn: setSpeed,
+        title: "Set Speed",
+        icon: "fast-forward",
+        inputs: {
+            speed: {
+                type: "number",
+                placeholder: "Milliseconds..."
+            }
+        }
+    },
     command: {
         fn: exec,
         title: "Command Input",
@@ -168,17 +181,6 @@ const commands = {
         inputs: {
             name: {
                 placeholder: "Directory Name"
-            }
-        }
-    },
-    speed: {
-        fn: setSpeed,
-        title: "Set Speed",
-        icon: "fast-forward",
-        inputs: {
-            speed: {
-                type: "number",
-                placeholder: "Milliseconds..."
             }
         }
     },
@@ -267,7 +269,6 @@ const commands = {
 loadOutput();
 
 
-const input = document.querySelector("#input");
 const commandTypes = Object.keys(commands);
 
 commandTypes.forEach(commandType => {
@@ -283,7 +284,7 @@ commandTypes.forEach(commandType => {
         const input = inputs[inputType];
         // return `<input value="${input.value || ''}" type="${input.type || 'text'}" placeholder="${input.placeholder || ''}" name="${inputType}"/>`;
     }).join("\n")}
-    <button type="submit">${
+    <button title="${command.title}" type="submit">${
         command.icon.split("|").map(icon => `<i data-feather="${icon}"></i>`).join('')
     }</button>
     `;
@@ -327,6 +328,7 @@ commandTypes.forEach(commandType => {
 
 document.querySelector("#reload").addEventListener("click", e => {
     e.preventDefault();
-
+    output.innerHTML = "";
+    showOutput({ input: "Reloading..." });
     loadOutput();
 })

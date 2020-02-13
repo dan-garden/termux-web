@@ -33,6 +33,10 @@
     width: calc(100vw - 40px);
 }
 
+button:focus {
+    outline: none;
+}
+
 .widget {
     background: white;
     display: inline-block;
