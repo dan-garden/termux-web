@@ -22,13 +22,13 @@
     width: 40px;
     text-align: center;
     padding: 0;
-    background-color: black;
+    background-color: transparent;
 }
 
 #output {
     right: 0;
     z-index: 9;
-    background-color: black;
+    background-color: transparent;
     font-size: 14px;
     width: calc(100vw - 40px);
 }
@@ -67,7 +67,7 @@ button:focus {
     display: block;
     margin: auto;
     width: 100%;
-    background-color: black;
+    background-color: transparent;
     color: white;
     border: none;
     cursor: pointer;
@@ -104,7 +104,7 @@ button:focus {
     top: 1px;
     right: 1px;
     padding: 5px;
-    background-color: black;
+    background-color: transparent;
     color: white;
     cursor: pointer;
     border: none;
